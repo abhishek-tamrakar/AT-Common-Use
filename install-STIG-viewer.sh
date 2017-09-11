@@ -14,6 +14,20 @@ OPT=( install update remove purge )
 PACKAGES=( openjfx wget unzip )
 WORK_DIR=$HOME/rean-stig-viewer
 # functions here
+usage()
+{
+cat <<_EOF_
+
+	USAGE:
+	${0%%/*} [-h(help)] 
+		OPTIONS: 
+			-h	: displays this help
+		SUMMARY:
+			Installs necessary packages for stig viewer and starts the applet.
+
+_EOF_
+exit 1
+}
 
 get()
 {
@@ -91,13 +105,19 @@ sudo ${CMD} ${OPT[0]} -y \
 
 getStigViewer()
 {
+isJarPresent=$(ls ${WORK_DIR}/STIGViewer*.jar)
+if [[ ${isJarPresent:-no} != "no" ]]; then
+warn "STIG viewer jar file is already present, skipping Download."
+	else
 # remove any existing versions from tmp
-rm -f /tmp/STIG*.jar
-wget http://iasecontent.disa.mil/stigs/zip/U_STIGViewer-2.5.4.zip \
-	-O /tmp/U_STIGViewer-2.5.4.zip	\
-	&& unzip -d ${WORK_DIR} /tmp/U_STIGViewer-2.5.4.zip
+	rm -f /tmp/STIG*.jar
+	wget http://iasecontent.disa.mil/stigs/zip/U_STIGViewer-2.5.4.zip \
+		-O /tmp/U_STIGViewer-2.5.4.zip	\
+		&& unzip -U -d ${WORK_DIR} /tmp/U_STIGViewer-2.5.4.zip
+fi
 }
 # main
+[[ $# -ge 1 ]] && usage
 trap cleanup EXIT
 getOS
 info "Got OS Details"
