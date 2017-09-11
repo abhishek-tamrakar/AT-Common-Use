@@ -105,16 +105,11 @@ sudo ${CMD} ${OPT[0]} -y \
 
 getStigViewer()
 {
-isJarPresent=$(ls ${WORK_DIR}/STIGViewer*.jar)
-if [[ ${isJarPresent:-no} != "no" ]]; then
-warn "STIG viewer jar file is already present, skipping Download."
-	else
 # remove any existing versions from tmp
 	rm -f /tmp/STIG*.jar
 	wget http://iasecontent.disa.mil/stigs/zip/U_STIGViewer-2.5.4.zip \
 		-O /tmp/U_STIGViewer-2.5.4.zip	\
-		&& unzip -U -d ${WORK_DIR} /tmp/U_STIGViewer-2.5.4.zip
-fi
+		&& unzip -u -d ${WORK_DIR} /tmp/U_STIGViewer-2.5.4.zip
 }
 # main
 [[ $# -ge 1 ]] && usage
