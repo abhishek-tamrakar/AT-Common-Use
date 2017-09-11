@@ -85,7 +85,7 @@ check_packages()
 local package
 for package in ${PACKAGES[@]}
 do 
-status=$(${GETPACKAGE} $package)
+status=$(${GETPACKAGE} $package 2>/dev/null)
 	if [[ ${status:-x} = "x" ]]; then
 	warn "Package $package NOT FOUND"
 	ABSENT=( ${ABSENT[@]} $package )
