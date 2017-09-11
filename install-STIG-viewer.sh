@@ -85,13 +85,13 @@ check_packages()
 local package
 for package in ${PACKAGES[@]}
 do 
-status=$(${GETPACKAGE} $package 2>/dev/null)
-	if [[ ${status:-x} = "x" ]]; then
-	warn "Package $package NOT FOUND"
-	ABSENT=( ${ABSENT[@]} $package )
-		else
-		info "Package $package FOUND"
-	fi
+${GETPACKAGE} $package 2>/dev/null >/dev/null \
+	|| \
+		{
+		warn "Package $package NOT FOUND"
+		ABSENT=( ${ABSENT[@]} $package );
+		} \
+	&& info "Package $package FOUND"
 done
 }
 
@@ -116,6 +116,10 @@ getStigViewer()
 trap cleanup EXIT
 getOS
 info "Got OS Details"
+[[ "${VERSION_ID}" = "14.04" ]] \
+	&& \
+	error "Ubuntu $VERSION_ID is not supported."
+
 cat << EOF
 
 	OS:		${ID^^}
