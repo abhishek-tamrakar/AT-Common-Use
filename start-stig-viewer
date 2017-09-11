@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Author: Abhishek Tamrakar
+# Copyright: REAN CLOUD LLC
+#  
+# Summary: Wrapper to start stig-viewer.
+###########################################
+set -e 
+# initialize variables
+header='\n%s\t%s'
+SCRIPTDIR=$0
+WORK_DIR=$HOME/rean-stig-viewer
+#
+if [[ -f ${WORK_DIR}/STIGViewer-2.5.4.jar ]]; then
+	JAVA=$(which java)	\
+	&& ${JAVA} -jar ${WORK_DIR}/STIG*.jar &
+spid=$!
+echo -e "INFO\tSTIG Viewer is running with process id: $spid"
+else
+	echo -e "INFO\tCannot find jarfile, running install.."
+	[ -f ${0%/*}/install-STIG-viewer.sh ] && ./install-STIG-viewer.sh
+fi
+exit 0
